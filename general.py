@@ -123,4 +123,5 @@ def print_result():
 
 
 # We're done, go to main
-main()
+if __name__ == '__main__':
+    main()
