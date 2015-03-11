@@ -22,17 +22,17 @@ used_weight = 0
 item_index = 0
 
 
-def main():
+def main(items):
     """ That's the main function that will be called at the end """
     # Get rank of each item (price/weight)
-    rank_items()
+    items = rank_items(items)
     # Order by rank (from highest to lowest rank)
-    order_items()
+    items = order_items(items)
     # Finally get items to use
-    while there_is_an_item():
-        if we_can_use_that_item():
-            if there_is_place_left_for_that_item():
-                use_item()
+    while is_item(items):
+        if can_use_item(items):
+            if place_left(items):
+                use_item(items)
             else:
                 next_item()
         else:
@@ -42,40 +42,29 @@ def main():
 
 
 #  === Helper functions ===
-# These functions are only being used to concentrate more on the algorithm.
-# Thats also the reason why I'm using global variables (Sorry for that)
 
-
-# And don't complain about function names! :D
-
-
-def rank_items():
+def rank_items(items):
     """ Get a rank for each item that is computed by price/weight """
-    global items
-    
     for item in items:
-        item['rank'] = (item['price'] * 1.0) / (item['weight'] * 1.0)  # 1.0 for floats
+        item['rank'] = (item['price'] * 1.0) / (item['weight'] * 1.0)  # I use 1.0 to get floats
+    return items
 
 
-def order_items():
+def order_items(items):
     """ Order items by rank (from highest to lowest rank) """
     # TODO: What about items[3] and items[4]
-    global items
-    
-    items = sorted(items, key=lambda item:item['rank'], reverse=True)
+    return sorted(items, key=lambda item:item['rank'], reverse=True)
 
 
-def there_is_an_item():  # This name will be easier to understand later :D
-    """ Return wether we still need to iterate in items """
-    global items
+def is_item(items):
+    """ Return whether we still need to iterate in items """
     global item_index
     
     return item_index < len(items)
 
 
-def we_can_use_that_item():  # This name will be easier to understand later :D
+def can_use_item(items):
     """ Return whether we can use this item. """
-    global items
     global max_item_amount
     global item_index
     
@@ -83,9 +72,8 @@ def we_can_use_that_item():  # This name will be easier to understand later :D
            items[item_index]['usage_count'] < max_item_amount
 
 
-def there_is_place_left_for_that_item():  # This name will be easier to understand later :D
+def place_left(items):
     """ Return whether there is still place left in our knapsack """
-    global items
     global used_weight
     global item_index
     global max_weight
@@ -93,9 +81,8 @@ def there_is_place_left_for_that_item():  # This name will be easier to understa
     return used_weight + items[item_index]['weight'] <= max_weight
 
 
-def use_item():
+def use_item(items):
     """ Pack item into our knapsack """
-    global items
     global item_index
     global used_weight
     
@@ -123,4 +110,5 @@ def print_result():
 
 
 # We're done, go to main
-main()
+if __name__ == '__main__':
+    main(items)
